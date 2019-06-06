@@ -16,7 +16,7 @@ public class LoopDemo {
 			
 			System.out.println("hello");
 			
-			count = count + 1 ; // re-initialize
+			count = count + 1 ; // re-initialization
 		}
 		
 		System.out.println(count);		

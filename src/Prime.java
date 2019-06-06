@@ -16,8 +16,7 @@ public class Prime {
 
 		int div = 1 ;
 		int fact = 0 ;
-		
-		
+				
 		while(div <= n) {
 			
 			if(n % div == 0) {

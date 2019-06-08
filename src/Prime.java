@@ -12,6 +12,8 @@ public class Prime {
 	public static void main(String[] args) {
 
 		Scanner scn = new Scanner(System.in);
+		
+		System.out.println("Enter n :");
 		int n = scn.nextInt();
 
 		int div = 1 ;

@@ -18,7 +18,7 @@ public class ArrayOps {
 		// int[] array = takeInput();
 		// System.out.println(array);
 
-		int[] array = { 100, 2, 78, 90 };
+		int[] array = { 80, 70, 60, 50, 40 };
 		// System.out.println(max(array));
 		// System.out.println(linearSearch(array, 40));
 		// System.out.println(binarySearch(array, 40));
@@ -33,7 +33,8 @@ public class ArrayOps {
 		// subset(array);
 		// display(array);
 		// bubbleSort(array);
-		selectionSort(array);
+		// selectionSort(array);
+		insertionSort(array);
 
 		display(array);
 
@@ -243,6 +244,24 @@ public class ArrayOps {
 
 		}
 
+	}
+
+	public static void insertionSort(int[] arr) {
+
+		int n = arr.length;
+		for (int count = 1; count <= n - 1; count++) {
+
+			int temp = arr[count];
+
+			int j = count - 1;
+
+			while (j >= 0 && arr[j] > temp) {
+				arr[j + 1] = arr[j];
+				j--;
+			}
+
+			arr[j + 1] = temp;
+		}
 	}
 
 }

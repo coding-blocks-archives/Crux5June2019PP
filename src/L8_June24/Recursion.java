@@ -15,8 +15,13 @@ public class Recursion {
 		// System.out.println(factorial(4));
 
 		// PD(2);
-		int[] arr = { 10, 20, 30, 40, 50 };
-		printRevArray(arr, 0);
+		int[] arr = { 10, 20, 30, 40, 50, 30, 30 };
+		// printRevArray(arr, 0);
+		int[] ans = findAllIndex(arr, 0, 30, 0);
+
+		for (int val : ans) {
+			System.out.println(val);
+		}
 	}
 
 	public static void PD(int n) {
@@ -169,16 +174,32 @@ public class Recursion {
 			return -1;
 		}
 
-		int rr =  findLastIndex(arr, vidx + 1, item);
+		int rr = findLastIndex(arr, vidx + 1, item);
 
 		if (arr[vidx] == item && rr == -1) {
 			return vidx;
 		}
-		
-		return rr ;
+
+		return rr;
 	}
 
-	public static int[] findAllIndex(int[] arr, int vidx, int item) {
+	public static int[] findAllIndex(int[] arr, int vidx, int item, int count) {
+
+		if (vidx == arr.length) {
+			int[] br = new int[count];
+			return br;
+		}
+
+		int[] rr;
+
+		if (arr[vidx] == item) {
+			rr = findAllIndex(arr, vidx + 1, item, count + 1);
+			rr[count] = vidx;
+		} else {
+			rr = findAllIndex(arr, vidx + 1, item, count);
+
+		}
+		return rr;
 
 	}
 

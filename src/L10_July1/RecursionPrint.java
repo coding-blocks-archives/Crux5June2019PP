@@ -20,7 +20,9 @@ public class RecursionPrint {
 
 		// System.out.println(mazePath(0, 0, 2, 2, ""));
 
-		System.out.println(lexicoCounting(9, 1000));
+		// System.out.println(lexicoCounting(9, 1000));
+
+		palindromePartitioning("abbcbc", "");
 	}
 
 	public static void printSS(String ques, String ans) {
@@ -214,6 +216,45 @@ public class RecursionPrint {
 		}
 
 		return c + 1;
+	}
+
+	public static boolean isPalindrome(String str) {
+
+		int left = 0;
+		int right = str.length() - 1;
+
+		while (left < right) {
+
+			if (str.charAt(left) != str.charAt(right)) {
+				return false;
+			}
+
+			left++;
+			right--;
+		}
+
+		return true;
+
+	}
+
+	public static void palindromePartitioning(String ques, String ans) {
+
+		if (ques.length() == 0) {
+			System.out.println(ans);
+			return;
+		}
+
+		for (int i = 1; i <= ques.length(); i++) {
+
+			String part = ques.substring(0, i);
+			String roq = ques.substring(i);
+
+			if (isPalindrome(part)) {
+				palindromePartitioning(roq, ans + part + " ");
+			}
+
+		}
+
 	}
 
 }

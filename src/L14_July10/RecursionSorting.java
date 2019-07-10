@@ -11,7 +11,7 @@ public class RecursionSorting {
 
 	public static void main(String[] args) {
 
-		int[] arr = { 50, 40, 30, 8, 9, 6 };
+		int[] arr = { 50, 40, 300, 8, 9, 6 };
 
 		int[] ans = mergeSort(arr, 0, arr.length - 1);
 		

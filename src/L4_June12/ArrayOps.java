@@ -18,7 +18,7 @@ public class ArrayOps {
 		// int[] array = takeInput();
 		// System.out.println(array);
 
-		int[] array = { 80, 70, 60, 50, 40 };
+		// int[] array = { 80, 70, 60, 50, 40 };
 		// System.out.println(max(array));
 		// System.out.println(linearSearch(array, 40));
 		// System.out.println(binarySearch(array, 40));
@@ -34,9 +34,19 @@ public class ArrayOps {
 		// display(array);
 		// bubbleSort(array);
 		// selectionSort(array);
-		insertionSort(array);
+		// insertionSort(array);
 
-		display(array);
+		int n = 100000;
+		int[] arr = new int[n];
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = i + 1;
+		}
+
+		long start = System.currentTimeMillis();
+		bubbleSort(arr);
+		long end = System.currentTimeMillis();
+		System.out.println(end - start);
+		// display(array);
 
 	}
 
@@ -209,9 +219,13 @@ public class ArrayOps {
 
 		for (int count = 0; count <= n - 2; count++) {
 
+			boolean flag = true;
+
 			for (int j = 0; j <= n - count - 2; j++) {
 
 				if (arr[j] > arr[j + 1]) {
+
+					flag = false;
 
 					// swap
 					int temp = arr[j];
@@ -219,6 +233,9 @@ public class ArrayOps {
 					arr[j + 1] = temp;
 				}
 			}
+
+			if (flag)
+				break;
 
 		}
 
@@ -265,3 +282,7 @@ public class ArrayOps {
 	}
 
 }
+
+
+
+

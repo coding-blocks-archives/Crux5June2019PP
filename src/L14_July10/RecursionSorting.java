@@ -13,9 +13,10 @@ public class RecursionSorting {
 
 		int[] arr = { 50, 40, 300, 8, 9, 6 };
 
-		int[] ans = mergeSort(arr, 0, arr.length - 1);
-		
-		for(int val : ans) {
+		// int[] ans = mergeSort(arr, 0, arr.length - 1);
+		quickSort(arr, 0, arr.length - 1);
+
+		for (int val : arr) {
 			System.out.println(val);
 		}
 	}
@@ -82,4 +83,49 @@ public class RecursionSorting {
 
 	}
 
+	public static void quickSort(int[] arr, int lo, int hi) {
+
+		if (lo >= hi) {
+			return;
+		}
+
+		// partitioning
+		int mid = (lo + hi) / 2;
+		int pivot = arr[mid];
+
+		int left = lo;
+		int right = hi;
+
+		while (left <= right) {
+
+			while (arr[left] < pivot) {
+				left++;
+			}
+
+			while (arr[right] > pivot) {
+				right--;
+			}
+
+			if (left <= right) {
+				int temp = arr[left];
+				arr[left] = arr[right];
+				arr[right] = temp;
+				left++;
+				right--;
+			}
+
+		}
+
+		// 2 smaller problems
+		quickSort(arr, lo, right);
+		quickSort(arr, left, hi);
+
+	}
+
 }
+
+
+
+
+
+

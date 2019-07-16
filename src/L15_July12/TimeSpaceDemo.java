@@ -1,5 +1,7 @@
 package L15_July12;
 
+import java.util.Arrays;
+
 /**
  * @author Garima Chhikara
  * @email garima.chhikara@codingblocks.com
@@ -12,8 +14,14 @@ public class TimeSpaceDemo {
 	public static void main(String[] args) {
 
 		// System.out.println(polynomial(5, 7));
+		// System.out.println(palindromicSScount("nnitin"));
 
-		System.out.println(palindromicSScount("nnitin"));
+		// SOE(50);
+
+		System.out.println(power(3, 7));
+		
+		System.out.println(Character.isDigit('1')); // true
+		System.out.println(Character.toLowerCase('A')); // a
 
 	}
 
@@ -66,5 +74,49 @@ public class TimeSpaceDemo {
 
 	}
 
-	
+	public static void SOE(int n) {
+
+		boolean[] primes = new boolean[n + 1];
+
+		Arrays.fill(primes, true);
+
+		primes[0] = primes[1] = false;
+
+		for (int table = 2; table * table <= n; table++) {
+
+			if (primes[table] == false) {
+				continue;
+			}
+
+			for (int mult = 2; table * mult <= n; mult++) {
+				primes[table * mult] = false;
+			}
+
+		}
+
+		for (int i = 0; i < primes.length; i++) {
+
+			if (primes[i]) {
+				System.out.println(i);
+			}
+		}
+
+	}
+
+	public static int power(int x, int n) {
+
+		if (n == 0) {
+			return 1;
+		}
+
+		int rr = power(x, n / 2);
+
+		if (n % 2 == 0) {
+			return rr * rr;
+		} else {
+			return rr * rr * x;
+		}
+
+	}
+
 }

@@ -22,7 +22,9 @@ public class RecursionPrint {
 
 		// System.out.println(lexicoCounting(9, 1000));
 
-		palindromePartitioning("abbcbc", "");
+		// palindromePartitioning("abbcbc", "");
+
+		lowerUpper("a1B2", "");
 	}
 
 	public static void printSS(String ques, String ans) {
@@ -257,4 +259,26 @@ public class RecursionPrint {
 
 	}
 
+	public static void lowerUpper(String ques, String ans) {
+
+		if (ques.length() == 0) {
+			System.out.println(ans);
+			return;
+		}
+
+		char ch = ques.charAt(0);
+		String roq = ques.substring(1);
+
+		if (Character.isDigit(ch)) {
+			lowerUpper(roq, ans + ch);
+		} else {
+			lowerUpper(roq, ans + Character.toUpperCase(ch));
+			lowerUpper(roq, ans + Character.toLowerCase(ch));
+		}
+
+	}
+
 }
+
+
+

@@ -14,18 +14,28 @@ public class LLClient {
 		LinkedList list = new LinkedList();
 		list.addLast(10);
 		list.addLast(20);
-		list.addFirst(30);
+		list.addLast(30);
 		list.addLast(40);
+		list.addLast(50);
+		list.addLast(60);
+		// list.addLast(70);
 		list.display();
-		list.addAt(50, 1);
+		// list.addAt(50, 1);
 		list.display();
 
-		System.out.println(list.removeFirst());
+		// System.out.println(list.removeFirst());
+		// list.display();
+		// System.out.println(list.removeLast());
+		// list.display();
+		// System.out.println(list.removeAt(1));
+		// list.display();
+
+		// list.RDR();
+		// list.fold();
+		System.out.println(list.mid());
 		list.display();
-		System.out.println(list.removeLast());
-		list.display();
-		System.out.println(list.removeAt(1));
-		list.display();
+
+		System.out.println(list.kthFromLast(5));
 
 	}
 }

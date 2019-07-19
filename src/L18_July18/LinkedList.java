@@ -18,10 +18,12 @@ public class LinkedList {
 	private Node tail;
 	private int size;
 
+	// O(1)
 	public boolean isEmpty() {
 		return size == 0;
 	}
 
+	// O(1)
 	public int getFirst() throws Exception {
 
 		if (size == 0) {
@@ -31,6 +33,7 @@ public class LinkedList {
 		return head.data;
 	}
 
+	// O(1)
 	public int getLast() throws Exception {
 
 		if (size == 0) {
@@ -40,6 +43,7 @@ public class LinkedList {
 		return tail.data;
 	}
 
+	// O(n)
 	public int getAt(int idx) throws Exception {
 
 		if (size == 0) {
@@ -59,6 +63,7 @@ public class LinkedList {
 		return temp.data;
 	}
 
+	// O(n)
 	private Node getNodeAt(int idx) throws Exception {
 
 		if (size == 0) {
@@ -78,6 +83,7 @@ public class LinkedList {
 		return temp;
 	}
 
+	// O(n)
 	public void display() {
 
 		System.out.println("---------------------");
@@ -94,6 +100,7 @@ public class LinkedList {
 
 	}
 
+	// O(1)
 	public void addLast(int item) {
 
 		// create a new node
@@ -116,6 +123,7 @@ public class LinkedList {
 
 	}
 
+	// O(1)
 	public void addFirst(int item) {
 
 		// create a new node
@@ -137,6 +145,7 @@ public class LinkedList {
 
 	}
 
+	// O(n)
 	public void addAt(int item, int idx) throws Exception {
 
 		if (idx < 0 || idx > size) {
@@ -168,6 +177,7 @@ public class LinkedList {
 
 	}
 
+	// O(1)
 	public int removeFirst() throws Exception {
 
 		if (size == 0) {
@@ -188,6 +198,7 @@ public class LinkedList {
 
 	}
 
+	// O(n)
 	public int removeLast() throws Exception {
 
 		if (size == 0) {
@@ -209,6 +220,7 @@ public class LinkedList {
 
 	}
 
+	// O(n)
 	public int removeAt(int idx) throws Exception {
 
 		if (size == 0) {
@@ -235,6 +247,188 @@ public class LinkedList {
 			return n.data;
 
 		}
+	}
+
+	public void RDI() throws Exception {
+
+		int left = 0;
+		int right = size - 1;
+
+		while (left < right) {
+
+			Node ln = getNodeAt(left);
+			Node rn = getNodeAt(right);
+
+			int temp = ln.data;
+			ln.data = rn.data;
+			rn.data = temp;
+
+			left++;
+			right--;
+
+		}
+
+	}
+
+	public void RPI() {
+
+		Node prev = null;
+		Node curr = head;
+
+		while (curr != null) {
+
+			Node ahead = curr.next;
+
+			curr.next = prev;
+
+			prev = curr;
+			curr = ahead;
+
+		}
+
+		Node temp = head;
+		head = tail;
+		tail = temp;
+
+		// tail.next = null;
+
+	}
+
+	public void RPR() {
+		RPR(null, head);
+
+		Node temp = head;
+		head = tail;
+		tail = temp;
+
+		// tail.next = null;
+
+	}
+
+	private void RPR(Node prev, Node curr) {
+
+		if (curr == null) {
+			return;
+		}
+
+		RPR(curr, curr.next);
+		curr.next = prev;
+
+		// Node ahead = curr.next ;
+		// curr.next = prev;
+		// RPR(curr, ahead);
+
+	}
+
+	public void RDR() {
+		// RDR(head, head, 0);
+
+		HeapMover mover = new HeapMover();
+		mover.left = head;
+
+		RDRHeap(mover, head, 0);
+
+	}
+
+	private Node RDR(Node left, Node right, int count) {
+
+		if (right == null) {
+			return left;
+		}
+
+		Node cl = RDR(left, right.next, count + 1);
+
+		if (count >= size / 2) {
+			int temp = cl.data;
+			cl.data = right.data;
+			right.data = temp;
+		}
+
+		return cl.next;
+	}
+
+	private class HeapMover {
+		Node left;
+	}
+
+	private void RDRHeap(HeapMover mover, Node right, int count) {
+
+		if (right == null) {
+			return;
+		}
+
+		RDRHeap(mover, right.next, count + 1);
+
+		if (count >= size / 2) {
+			int temp = mover.left.data;
+			mover.left.data = right.data;
+			right.data = temp;
+		}
+
+		mover.left = mover.left.next;
+	}
+
+	public void fold() {
+		fold(head, head, 0);
+	}
+
+	private Node fold(Node left, Node right, int count) {
+
+		if (right == null) {
+			return left;
+		}
+
+		left = fold(left, right.next, count + 1);
+
+		if (count > size / 2) {
+
+			Node ahead = left.next;
+
+			left.next = right;
+			right.next = ahead;
+
+			return ahead;
+		}
+
+		if (count == size / 2) {
+			tail = right;
+			tail.next = null;
+		}
+
+		return null;
+
+	}
+
+	public int mid() {
+
+		Node slow = head;
+		Node fast = head;
+
+		// while (fast.next != null && fast.next.next != null) {
+		while (fast != null && fast.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+
+		return slow.data;
+	}
+
+	public int kthFromLast(int k) {
+
+		Node slow = head;
+		Node fast = head;
+
+		for (int i = 1; i <= k; i++) {
+			fast = fast.next;
+		}
+
+		while (fast != null) {
+			slow = slow.next;
+			fast = fast.next;
+		}
+
+		return slow.data;
+
 	}
 
 }

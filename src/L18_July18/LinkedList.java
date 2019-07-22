@@ -12,6 +12,14 @@ public class LinkedList {
 	private class Node {
 		int data;
 		Node next;
+
+		public Node(int data) {
+			this.data = data;
+		}
+
+		public Node() {
+
+		}
 	}
 
 	private Node head;
@@ -428,6 +436,200 @@ public class LinkedList {
 		}
 
 		return slow.data;
+
+	}
+
+	public int linkedListIntersection() {
+
+		Node a1 = new Node(10);
+		Node a2 = new Node(20);
+		Node a3 = new Node(30);
+		Node a4 = new Node(40);
+		Node a5 = new Node(50);
+		Node a6 = new Node(60);
+
+		Node b1 = new Node(70);
+		Node b2 = new Node(80);
+		Node b3 = new Node(90);
+		Node b4 = new Node(100);
+		Node b5 = new Node(110);
+		Node b6 = new Node(120);
+
+		a1.next = a2;
+		a2.next = a3;
+		a3.next = a4;
+		a4.next = a5;
+		a5.next = a6;
+
+		b1.next = b2;
+		b2.next = b3;
+		b3.next = b4;
+		b4.next = b5;
+		b5.next = b6;
+		b6.next = a3;
+
+		// logic ...
+		Node fp = a1;
+		Node sp = b1;
+
+		while (fp != sp) {
+
+			// fp = (fp == null ) ? b1 : fp.next ;
+
+			if (fp == null) {
+				fp = b1;
+			} else {
+				fp = fp.next;
+			}
+
+			if (sp == null) {
+				sp = a1;
+			} else {
+				sp = sp.next;
+			}
+		}
+
+		return fp.data;
+
+	}
+
+	public void createDummyList() {
+
+		Node a1 = new Node(10);
+		Node a2 = new Node(20);
+		Node a3 = new Node(30);
+		Node a4 = new Node(40);
+		Node a5 = new Node(50);
+		Node a6 = new Node(60);
+		Node a7 = new Node(70);
+		Node a8 = new Node(80);
+
+		a1.next = a2;
+		a2.next = a3;
+		a3.next = a4;
+		a4.next = a5;
+		a5.next = a6;
+		a6.next = a7;
+		a7.next = a8;
+		a8.next = a4;
+
+		head = a1;
+	}
+
+	public boolean detectRemoveLoop1() {
+
+		Node slow = head;
+		Node fast = head;
+
+		while (fast != null && fast.next != null) {
+
+			slow = slow.next;
+			fast = fast.next.next;
+
+			if (slow == fast) {
+				break;
+			}
+
+		}
+
+		if (slow == fast) {
+
+			// remove loop
+
+			// 1. no. of nodes in loop
+			int count = 1;
+			Node temp = slow.next;
+			while (temp != slow) {
+				count++;
+				temp = temp.next;
+			}
+
+			// 2. move one pointer count distance
+			Node ahead = head;
+
+			for (int i = 1; i <= count; i++) {
+				ahead = ahead.next;
+			}
+
+			// 3. move two pointers with same speed
+			Node loop = ahead;
+			Node start = head;
+
+			while (loop.next != start.next) {
+				loop = loop.next;
+				start = start.next;
+			}
+
+			loop.next = null;
+
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public boolean detectRemoveLoop2() {
+
+		Node slow = head;
+		Node fast = head;
+
+		while (fast != null && fast.next != null) {
+
+			slow = slow.next;
+			fast = fast.next.next;
+
+			if (slow == fast) {
+				break;
+			}
+
+		}
+
+		if (slow == fast) {
+
+			// remove loop
+			Node loop = slow;
+			Node start = head;
+
+			while (loop.next != start.next) {
+				loop = loop.next;
+				start = start.next;
+			}
+
+			loop.next = null;
+
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public void kReverse(int k) throws Exception {
+
+		LinkedList prev = null;
+
+		while (size != 0) {
+
+			LinkedList curr = new LinkedList();
+
+			for (int i = 1; i <= k && size != 0; i++) {
+				curr.addFirst(this.removeFirst());
+			}
+
+			if (prev == null) {
+				prev = curr;
+			} else {
+				prev.tail.next = curr.head;
+				prev.tail = curr.tail;
+				prev.size += curr.size;
+			}
+
+		}
+
+		head = prev.head;
+		tail = prev.tail;
+		size = prev.size;
 
 	}
 

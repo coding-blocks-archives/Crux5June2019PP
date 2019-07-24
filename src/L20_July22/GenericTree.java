@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 /**
  * @author Garima Chhikara
  * @email garima.chhikara@codingblocks.com
@@ -69,8 +71,7 @@ public class GenericTree {
 		str += ".";
 		System.out.println(str);
 
-		for (int i = node.children.size() - 1; i >= 0; i--) {
-			Node child = node.children.get(i);
+		for (Node child : node.children) {
 			display(child);
 		}
 
@@ -292,12 +293,103 @@ public class GenericTree {
 			}
 
 		}
-		
+
 		System.out.println();
 
 	}
 
-	public void levelOrderLW() {
+	public void levelOrderLW1() {
+
+		LinkedList<Node> queue = new LinkedList<>();
+
+		queue.addLast(root);
+		queue.addLast(null);
+
+		while (!queue.isEmpty()) {
+
+			Node rn = queue.removeFirst();
+
+			if (rn == null) {
+				System.out.println();
+
+				if (queue.isEmpty()) {
+					break;
+				}
+
+				queue.addLast(null);
+				continue;
+			}
+
+			System.out.print(rn.data + " ");
+
+			for (Node child : rn.children) {
+				queue.addLast(child);
+			}
+
+		}
+	}
+
+	public void levelOrderLW2() {
+
+		LinkedList<Node> queue = new LinkedList<>();
+		LinkedList<Node> helper = new LinkedList<>();
+
+		queue.addLast(root);
+
+		while (!queue.isEmpty()) {
+
+			Node rn = queue.removeFirst();
+
+			System.out.print(rn.data + " ");
+
+			for (Node child : rn.children) {
+				helper.addLast(child);
+			}
+
+			if (queue.isEmpty()) {
+				queue = helper;
+				helper = new LinkedList<>();
+
+				System.out.println();
+			}
+
+		}
+	}
+
+	public void levelOrderZZ() {
+
+		LinkedList<Node> primaryS = new LinkedList<>();
+		LinkedList<Node> helperS = new LinkedList<>();
+
+		int c = 0;
+
+		primaryS.addFirst(root);
+
+		while (!primaryS.isEmpty()) {
+
+			Node rn = primaryS.removeFirst();
+
+			System.out.print(rn.data + " ");
+
+			if (c % 2 == 0) {
+				for (Node child : rn.children) {
+					helperS.addFirst(child);
+				}
+			} else {
+				for (int i = rn.children.size() - 1; i >= 0; i--) {
+					helperS.addFirst(rn.children.get(i));
+				}
+			}
+
+			if (primaryS.isEmpty()) {
+				c++ ;
+				primaryS = helperS;
+				helperS = new LinkedList<>();
+
+				System.out.println();
+			}
+
+		}
 
 	}
 

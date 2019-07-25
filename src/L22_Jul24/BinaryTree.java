@@ -1,5 +1,6 @@
 package L22_Jul24;
 
+import java.security.IdentityScope;
 import java.util.Scanner;
 
 /**
@@ -215,8 +216,139 @@ public class BinaryTree {
 
 	}
 
+	private class DiaPair {
+		int d = 0;
+		int h = -1;
+	}
+
+	public int diameter3() {
+		return diameter3(root).d;
+	}
+
+	private DiaPair diameter3(Node node) {
+
+		if (node == null) {
+			return new DiaPair();
+		}
+
+		DiaPair ldp = diameter3(node.left);
+		DiaPair rdp = diameter3(node.right);
+
+		DiaPair sdp = new DiaPair();
+
+		int ld = ldp.d;
+		int rd = rdp.d;
+		int sp = ldp.h + rdp.h + 2;
+
+		sdp.d = Math.max(sp, Math.max(ld, rd));
+
+		sdp.h = Math.max(ldp.h, rdp.h) + 1;
+
+		return sdp;
+	}
+
+	public boolean isBalanced() {
+		return isBalanced(root);
+	}
+
+	private boolean isBalanced(Node node) {
+
+		if (node == null) {
+			return true;
+		}
+
+		boolean lb = isBalanced(node.left);
+		boolean rb = isBalanced(node.right);
+
+		int bf = ht(node.left) - ht(node.right);
+
+		if ((bf == -1 || bf == 0 || bf == 1) && lb && rb) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	private class BalPair {
+		boolean b = true;
+		int h = -1;
+	}
+
+	public boolean isBalanced2() {
+		return isBalanced2(root).b;
+	}
+
+	private BalPair isBalanced2(Node node) {
+
+		if (node == null) {
+			return new BalPair();
+		}
+
+		BalPair lbp = isBalanced2(node.left);
+		BalPair rbp = isBalanced2(node.right);
+
+		BalPair sbp = new BalPair();
+
+		int bf = lbp.h - rbp.h;
+
+		if ((bf == -1 || bf == 0 || bf == 1) && lbp.b && rbp.b) {
+			sbp.b = true;
+		} else {
+			sbp.b = false;
+		}
+
+		sbp.h = Math.max(lbp.h, rbp.h) + 1;
+
+		return sbp;
+	}
+
+	public boolean flipEquivalent(BinaryTree other) {
+		return flipEquivalent(root, other.root);
+	}
+
+	public boolean flipEquivalent(Node n1, Node n2) {
+
+		if (n1 == null && n2 == null) {
+			return true;
+		}
+
+		if (n1 == null || n2 == null) {
+			return false;
+		}
+
+		if (n1.data != n2.data) {
+			return false;
+		}
+
+		boolean ll = flipEquivalent(n1.left, n2.left);
+		boolean rr = flipEquivalent(n1.right, n2.right);
+
+		boolean lr = flipEquivalent(n1.left, n2.right);
+		boolean rl = flipEquivalent(n1.right, n2.left);
+
+		return (ll && rr) || (lr && rl);
+
+	}
+
+	// NLR : preorder
+	// NRL : postorder rev
+	// LNR : inorder
+	// RNL : inoder rev
+	// LRN : postorder
+	// RLN : preoder rev
+	public void preorder() {
+		preorder(root);
+	}
+
+	private void preorder(Node node) {
+
+		if (node == null)
+			return;
+
+		System.out.println(node.data);
+		preorder(node.left);
+		preorder(node.right);
+	}
+
 }
-
-
-
-

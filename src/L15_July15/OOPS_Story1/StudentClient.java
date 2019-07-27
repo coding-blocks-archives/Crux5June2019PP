@@ -68,6 +68,13 @@ public class StudentClient {
 		Student s10 = new Student("XYZ", 80);
 		s10.introduceYourself();
 
+		Test50(s10);
+	}
+
+	public static void Test50(Student s) {
+		Student s1 = s;
+		s1.name = "ABC";
+		// s1 = null ;
 	}
 
 	public static void Test3(Student s, int age, String name, int myAge, String myName) {
@@ -99,4 +106,5 @@ public class StudentClient {
 		s1 = s2;
 		s2 = temp;
 	}
+
 }

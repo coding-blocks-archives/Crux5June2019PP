@@ -20,5 +20,50 @@ public class BSTClient {
 		System.out.println(bst.max());
 		System.out.println(bst.find(100));
 		System.out.println(bst.ht());
+
+		bst.printInRange(15, 55);
+		// bst.replaceWithSumLarger();
+
+		bst.display();
+		// bst.addOneLevelBefore(29);
+		// bst.addParent(25);
+		// bst.addReturn(24);
+		// bst.addReturn(15);
+		bst.addReturn(29);
+
+		
+		bst.display();
+		
+		bst.removeParent(10);
+		bst.removeParent(30);
+		bst.removeParent(20);
+		bst.removeParent(29);
+		
+		bst.display();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
 	}
 }
+
+
+
+
+
+
+
+
+

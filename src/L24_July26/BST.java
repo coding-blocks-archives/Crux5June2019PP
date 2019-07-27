@@ -139,22 +139,207 @@ public class BST {
 		return Math.max(lh, rh) + 1;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void printInRange(int lo, int hi) {
+		printInRange(root, lo, hi);
+	}
+
+	private void printInRange(Node node, int lo, int hi) {
+
+		if (node == null) {
+			return;
+		}
+
+		if (node.data < lo) {
+			printInRange(node.right, lo, hi);
+		}
+
+		if (node.data > hi) {
+			printInRange(node.left, lo, hi);
+		}
+
+		if (node.data >= lo && node.data <= hi) {
+
+			printInRange(node.left, lo, hi);
+			System.out.println(node.data);
+			printInRange(node.right, lo, hi);
+		}
+
+	}
+
+	public void replaceWithSumLarger() {
+		replaceWithSumLarger(root, new int[1]);
+	}
+
+	private void replaceWithSumLarger(Node node, int[] maxsum) {
+
+		if (node == null) {
+			return;
+		}
+
+		replaceWithSumLarger(node.right, maxsum);
+
+		int temp = node.data;
+		node.data = maxsum[0];
+		maxsum[0] += temp;
+
+		replaceWithSumLarger(node.left, maxsum);
+
+	}
+
+	public void addOneLevelBefore(int item) {
+
+		if (root == null) {
+			root = new Node();
+			root.data = item;
+		} else {
+			addOneLevelBefore(root, item);
+		}
+	}
+
+	private void addOneLevelBefore(Node node, int item) {
+
+		if (item <= node.data) {
+
+			if (node.left == null) {
+				Node nn = new Node();
+				nn.data = item;
+				node.left = nn;
+			} else {
+				addOneLevelBefore(node.left, item);
+			}
+
+		} else {
+
+			if (node.right == null) {
+				Node nn = new Node();
+				nn.data = item;
+				node.right = nn;
+			} else {
+				addOneLevelBefore(node.right, item);
+			}
+
+		}
+
+	}
+
+	public void addParent(int item) {
+		if (root == null) {
+			root = new Node();
+			root.data = item;
+		} else {
+			addParent(root, null, item);
+		}
+	}
+
+	private void addParent(Node node, Node parent, int item) {
+
+		if (node == null) {
+
+			Node nn = new Node();
+			nn.data = item;
+
+			if (item <= parent.data) {
+				parent.left = nn;
+			} else {
+				parent.right = nn;
+			}
+
+			return;
+		}
+
+		if (item <= node.data) {
+			addParent(node.left, node, item);
+		} else {
+			addParent(node.right, node, item);
+		}
+
+	}
+
+	public void addReturn(int item) {
+		root = addReturn(root, item);
+	}
+
+	private Node addReturn(Node node, int item) {
+
+		if (node == null) {
+			Node nn = new Node();
+			nn.data = item;
+			return nn;
+		}
+
+		if (item <= node.data) {
+			node.left = addReturn(node.left, item);
+		} else {
+			node.right = addReturn(node.right, item);
+		}
+
+		return node;
+	}
+
+	public void removeParent(int item) {
+
+		if (root.data == item) {
+			if (root.left == null) {
+				root = root.right;
+			} else if (root.right == null) {
+				root = root.left;
+			} else {
+				removeParent(root, null, item);
+			}
+		} else {
+			removeParent(root, null, item);
+		}
+
+	}
+
+	private void removeParent(Node node, Node parent, int item) {
+
+		if (node == null) {
+			return;
+		}
+
+		if (item < node.data) {
+			removeParent(node.left, node, item);
+		} else if (item > node.data) {
+			removeParent(node.right, node, item);
+		} else {
+
+			if (node.left == null && node.right == null) {
+
+				if (item <= parent.data) {
+					parent.left = null;
+				} else {
+					parent.right = null;
+				}
+			}
+
+			else if (node.left == null && node.right != null) {
+
+				if (item <= parent.data) {
+					parent.left = node.right;
+				} else {
+					parent.right = node.right;
+				}
+			}
+
+			else if (node.left != null && node.right == null) {
+
+				if (item <= parent.data) {
+					parent.left = node.left;
+				} else {
+					parent.right = node.left;
+				}
+			}
+
+			else {
+
+				int m = max(node.left);
+				node.data = m;
+				removeParent(node.left, node, m);
+
+			}
+		}
+
+	}
+
 }

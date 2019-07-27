@@ -499,4 +499,37 @@ public class BinaryTree {
 
 	}
 
+	private class BSTPair {
+		boolean isBST = true;
+		int max = Integer.MIN_VALUE;
+		int min = Integer.MAX_VALUE;
+
+	}
+
+	public boolean isTreeBST() {
+		return isTreeBST(root).isBST;
+	}
+
+	private BSTPair isTreeBST(Node node) {
+
+		if (node == null) {
+			return new BSTPair();
+		}
+
+		BSTPair lbp = isTreeBST(node.left);
+		BSTPair rbp = isTreeBST(node.right);
+
+		BSTPair sbp = new BSTPair();
+
+		if (lbp.isBST && rbp.isBST && node.data > lbp.max && node.data < rbp.min) {
+			sbp.isBST = true;
+		} else {
+			sbp.isBST = false;
+		}
+
+		sbp.max = Math.max(node.data, rbp.max);
+		sbp.min = Math.min(node.data, lbp.min);
+
+		return sbp;
+	}
 }

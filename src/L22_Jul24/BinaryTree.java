@@ -1,7 +1,7 @@
 package L22_Jul24;
 
-import java.security.IdentityScope;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * @author Garima Chhikara
@@ -60,6 +60,37 @@ public class BinaryTree {
 
 		return nn;
 
+	}
+
+	public BinaryTree(int[] pre, int[] in) {
+		root = construct(pre, 0, pre.length - 1, in, 0, in.length - 1);
+	}
+
+	private Node construct(int[] pre, int plo, int phi, int[] in, int ilo, int ihi) {
+
+		if (ilo > ihi || plo > phi) {
+			return null;
+		}
+
+		Node nn = new Node();
+		nn.data = pre[plo];
+
+		int nel = 0;
+
+		int si = -1;
+		for (int i = ilo; i <= ihi; i++) {
+			if (in[i] == pre[plo]) {
+				si = i;
+				break;
+			}
+
+			nel++;
+		}
+
+		nn.left = construct(pre, plo + 1, plo + nel, in, ilo, si - 1); // left st
+		nn.right = construct(pre, plo + nel + 1, phi, in, si + 1, ihi); // right st
+
+		return nn;
 	}
 
 	public void display() {
@@ -169,6 +200,8 @@ public class BinaryTree {
 	private class HeapMover {
 		int ans;
 	}
+
+	// Ques : https://leetcode.com/problems/diameter-of-binary-tree/
 
 	public int diameter1() {
 		HeapMover mover = new HeapMover();
@@ -303,6 +336,8 @@ public class BinaryTree {
 		return sbp;
 	}
 
+	// Ques : https://leetcode.com/problems/flip-equivalent-binary-trees/
+
 	public boolean flipEquivalent(BinaryTree other) {
 		return flipEquivalent(root, other.root);
 	}
@@ -339,6 +374,7 @@ public class BinaryTree {
 	// RLN : preoder rev
 	public void preorder() {
 		preorder(root);
+		System.out.println();
 	}
 
 	private void preorder(Node node) {
@@ -346,9 +382,121 @@ public class BinaryTree {
 		if (node == null)
 			return;
 
-		System.out.println(node.data);
+		System.out.print(node.data + " ");
 		preorder(node.left);
 		preorder(node.right);
+	}
+
+	private class Pair {
+		Node n;
+		boolean sd;
+		boolean ld;
+		boolean rd;
+	}
+
+	public void preorderI() {
+
+		Stack<Pair> stack = new Stack<>();
+
+		Pair sp = new Pair();
+		sp.n = root;
+
+		stack.push(sp);
+
+		while (!stack.isEmpty()) {
+
+			Pair tp = stack.peek();
+
+			if (tp.sd == false) {
+				System.out.print(tp.n.data + " ");
+				tp.sd = true;
+
+			} else if (tp.ld == false) {
+
+				Pair np = new Pair();
+				np.n = tp.n.left;
+
+				if (np.n != null)
+					stack.push(np);
+
+				tp.ld = true;
+
+			} else if (tp.rd == false) {
+
+				Pair np = new Pair();
+				np.n = tp.n.right;
+
+				if (np.n != null)
+					stack.push(np);
+
+				tp.rd = true;
+
+			} else {
+				stack.pop();
+			}
+
+		}
+
+		System.out.println();
+
+	}
+
+	// Ques : https://www.geeksforgeeks.org/find-largest-subtree-sum-tree/
+
+	public int maxSubtreeSum() {
+		int[] maxsum = new int[1];
+		maxsum[0] = Integer.MIN_VALUE;
+		maxSubtreeSum(root, maxsum);
+		return maxsum[0];
+	}
+
+	private int maxSubtreeSum(Node node, int[] maxsum) {
+
+		if (node == null) {
+			return 0;
+		}
+
+		int ls = maxSubtreeSum(node.left, maxsum);
+		int rs = maxSubtreeSum(node.right, maxsum);
+
+		int ts = ls + rs + node.data;
+
+		if (ts > maxsum[0]) {
+			maxsum[0] = ts;
+		}
+
+		return ts;
+
+	}
+
+	private class SubtreePair {
+		int entireSum;
+		int maxSum = Integer.MIN_VALUE;
+	}
+
+	public int maxSubtreeSum2() {
+
+		return maxSubtreeSum2(root).maxSum;
+
+	}
+
+	private SubtreePair maxSubtreeSum2(Node node) {
+
+		if (node == null) {
+			return new SubtreePair();
+		}
+
+		SubtreePair lsp = maxSubtreeSum2(node.left);
+		SubtreePair rsp = maxSubtreeSum2(node.right);
+
+		SubtreePair ssp = new SubtreePair();
+
+		ssp.entireSum = lsp.entireSum + rsp.entireSum + node.data;
+
+		ssp.maxSum = Math.max(ssp.entireSum, Math.max(lsp.maxSum, rsp.maxSum));
+
+		return ssp;
+
 	}
 
 }

@@ -504,10 +504,18 @@ public class BinaryTree {
 		int max = Integer.MIN_VALUE;
 		int min = Integer.MAX_VALUE;
 
+		Node largestBSTRootNode;
+		int size;
+
 	}
 
 	public boolean isTreeBST() {
-		return isTreeBST(root).isBST;
+		BSTPair res = isTreeBST(root);
+
+		System.out.println(res.largestBSTRootNode.data);
+		System.out.println(res.size);
+
+		return res.isBST;
 	}
 
 	private BSTPair isTreeBST(Node node) {
@@ -523,8 +531,20 @@ public class BinaryTree {
 
 		if (lbp.isBST && rbp.isBST && node.data > lbp.max && node.data < rbp.min) {
 			sbp.isBST = true;
+
+			sbp.largestBSTRootNode = node;
+			sbp.size = lbp.size + rbp.size + 1;
+
 		} else {
 			sbp.isBST = false;
+
+			if (lbp.size >= rbp.size) {
+				sbp.largestBSTRootNode = lbp.largestBSTRootNode;
+				sbp.size = lbp.size;
+			} else {
+				sbp.largestBSTRootNode = rbp.largestBSTRootNode;
+				sbp.size = rbp.size;
+			}
 		}
 
 		sbp.max = Math.max(node.data, rbp.max);

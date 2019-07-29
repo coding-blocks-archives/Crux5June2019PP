@@ -19,13 +19,17 @@ public class BTClient {
 	// Subtree Sum :
 	// 1 true 2 true 4 false false true -5 false false true -3 true -4 false false
 	// true 5 true 6 false false true 7 false false
+
 	public static void main(String[] args) {
 
 		// int[] pre = { 10, 20, 40, 50, 30, 60, 70, 80 };
 		// int[] in = { 20, 50, 40, 10, 60, 30, 70, 80 };
 
-		int[] pre = { 70, 50, 20, 60, 100, 75, 105 };
-		int[] in = { 20, 50, 60, 70, 75, 100, 105 };
+		// int[] pre = { 70, 50, 20, 60, 100, 75, 105 };
+		// int[] in = { 20, 50, 60, 70, 75, 100, 105 };
+
+		int[] pre = { 100, 500, 5, 60, 55, 70, 2000, 150, 300, 250, 400, 350, 500 };
+		int[] in = { 5, 500, 55, 60, 70, 100, 150, 2000, 250, 300, 350, 400, 500 };
 		BinaryTree bt = new BinaryTree(pre, in);
 		bt.display();
 

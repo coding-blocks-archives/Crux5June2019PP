@@ -14,7 +14,7 @@ public class Demo {
 	public static void main(String[] args) {
 
 		Integer[] arr = { 10, 20, 30, 40, 50 };
-		bubbleSort(arr);
+		bubbleSort(arr, new IntegerComparator());
 		display(arr);
 
 		String[] sarr = { "hello", "hi", "bye" };

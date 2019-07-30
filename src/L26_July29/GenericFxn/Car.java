@@ -7,7 +7,7 @@ package L26_July29.GenericFxn;
  *
  */
 
-public class Car {
+public class Car{ // implements Comparable<Car>{
 
 	int speed;
 	int price;
@@ -27,7 +27,7 @@ public class Car {
 	// @Override
 	// public int compareTo(Car other) {
 	// return this.speed - other.speed;
-	// return other.price - this.price;
-	// return this.color.compareTo(other.color);
+	// // return other.price - this.price;
+	// // return this.color.compareTo(other.color);
 	// }
 }

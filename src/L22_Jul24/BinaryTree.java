@@ -1,7 +1,13 @@
 package L22_Jul24;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Stack;
+
+import L26_July29.GenericFxn.IntegerComparator;
 
 /**
  * @author Garima Chhikara
@@ -552,4 +558,68 @@ public class BinaryTree {
 
 		return sbp;
 	}
+
+	private class VOPair implements Comparable<VOPair> {
+		int val;
+		int hlevel;
+		int vlevel;
+
+		public VOPair(int val, int hlevel, int vlevel) {
+			this.val = val;
+			this.hlevel = hlevel;
+			this.vlevel = vlevel;
+		}
+
+		@Override
+		public String toString() {
+			return val + "";
+		}
+
+		@Override
+		public int compareTo(VOPair o) {
+			return this.hlevel - o.hlevel;
+		}
+	}
+
+	public void verticalDisplay() {
+		HashMap<Integer, ArrayList<VOPair>> map = new HashMap<>();
+
+		verticalDisplay(root, map, 0, 0);
+
+		// keys sort
+		ArrayList<Integer> allkeys = new ArrayList<>(map.keySet());
+		Collections.sort(allkeys);
+
+		// loop on all keys
+		for (int key : allkeys) {
+
+			// array list sort
+			ArrayList<VOPair> list = map.get(key);
+			Collections.sort(list);
+
+			System.out.println(key + " -> " + list);
+		}
+
+		System.out.println(map);
+
+	}
+
+	private void verticalDisplay(Node node, HashMap<Integer, ArrayList<VOPair>> map, int hl, int vl) {
+
+		if (node == null) {
+			return;
+		}
+
+		if (!map.containsKey(vl)) {
+			map.put(vl, new ArrayList<>());
+		}
+
+		VOPair np = new VOPair(node.data, hl, vl);
+		map.get(vl).add(np);
+
+		verticalDisplay(node.left, map, hl + 1, vl - 1);
+		verticalDisplay(node.right, map, hl + 1, vl + 1);
+
+	}
+
 }

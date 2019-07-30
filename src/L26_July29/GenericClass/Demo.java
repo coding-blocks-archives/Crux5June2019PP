@@ -1,5 +1,8 @@
 package L26_July29.GenericClass;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 import L26_July29.GenericFxn.Car;
 
 /**
@@ -13,7 +16,32 @@ public class Demo {
 
 	public static void main(String[] args) {
 
-		// Pair<String, Integer> p = new Pair<>();
+		Pair<Pair<String, Integer>, Pair<Character, Boolean>> p = new Pair<>();
+
+		p.a = new Pair<>();
+		p.b = new Pair<>();
+
+		p.a.a = "abc";
+		p.a.b = 100;
+
+		System.out.println(p.a.a);
+		System.out.println(p.a.b);
+		System.out.println(p.b.a);
+		System.out.println(p.b.b);
+
+		ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+
+		list.add(new ArrayList<>());
+		list.add(new ArrayList<>());
+		list.add(new ArrayList<>());
+
+		list.get(0).add(10);
+		list.get(0).add(40);
+		list.get(1).add(20);
+		list.get(2).add(30);
+
+		System.out.println(list);
+		System.out.println(list.size());
 
 		LinkedListGeneric<Car> ll = new LinkedListGeneric<>();
 

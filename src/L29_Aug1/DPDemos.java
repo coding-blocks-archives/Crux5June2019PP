@@ -28,7 +28,30 @@ public class DPDemos {
 		// System.out.println(mazePathBU(n, n));
 		// System.out.println(mazePathBUSE(n, n));
 
-		System.out.println(LCS("abcddbhjfcjsehfeuihrfieu", "agcfddksjhcudghcuiehfu"));
+		String s1 = "saturdayDBJHFJDHVUDRHGUIE";
+		String s2 = "sundayBHXGVYUDGHVURHGUVE";
+
+		int[][] strg = new int[s1.length() + 1][s2.length() + 1];
+
+		for (int i = 0; i < strg.length; i++) {
+			Arrays.fill(strg[i], -1);
+		}
+
+		// System.out.println(LCSTD(s1, s2, strg));
+		// System.out.println(LCSBU(s1, s2));
+
+		// System.out.println(EditDistance(s1, s2));
+		// System.out.println(EditDistanceTD(s1, s2, strg));
+		// System.out.println(EditDistanceBU(s1, s2));
+
+		int[] arr = new int[500];
+
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = i + 1;
+		}
+
+		System.out.println(MCMTD(arr, 0, arr.length - 1, new int[arr.length][arr.length]));
+		System.out.println(MCMBU(arr));
 
 		long end = System.currentTimeMillis();
 		System.out.println(end - start);
@@ -258,4 +281,240 @@ public class DPDemos {
 
 	}
 
+	public static int LCSTD(String s1, String s2, int[][] strg) {
+
+		if (s1.length() == 0 || s2.length() == 0) {
+			return 0;
+		}
+
+		if (strg[s1.length()][s2.length()] != -1) {
+			return strg[s1.length()][s2.length()];
+		}
+
+		char ch1 = s1.charAt(0);
+		char ch2 = s2.charAt(0);
+
+		String ros1 = s1.substring(1);
+		String ros2 = s2.substring(1);
+
+		int ans = 0;
+		if (ch1 == ch2) {
+			ans = LCSTD(ros1, ros2, strg) + 1;
+		} else {
+			int o1 = LCSTD(s1, ros2, strg);
+			int o2 = LCSTD(ros1, s2, strg);
+
+			ans = Math.max(o1, o2);
+		}
+
+		strg[s1.length()][s2.length()] = ans;
+
+		return ans;
+
+	}
+
+	public static int LCSBU(String s1, String s2) {
+
+		int[][] strg = new int[s1.length() + 1][s2.length() + 1];
+
+		for (int row = s1.length() - 1; row >= 0; row--) {
+
+			for (int col = s2.length() - 1; col >= 0; col--) {
+
+				if (s1.charAt(row) == s2.charAt(col)) {
+					strg[row][col] = strg[row + 1][col + 1] + 1;
+				} else {
+
+					int o1 = strg[row][col + 1];
+					int o2 = strg[row + 1][col];
+
+					strg[row][col] = Math.max(o1, o2);
+
+				}
+
+			}
+
+		}
+
+		return strg[0][0];
+
+	}
+
+	public static int EditDistance(String s1, String s2) {
+
+		if (s1.length() == 0 || s2.length() == 0) {
+			return Math.max(s1.length(), s2.length());
+		}
+
+		char ch1 = s1.charAt(0);
+		char ch2 = s2.charAt(0);
+
+		String ros1 = s1.substring(1);
+		String ros2 = s2.substring(1);
+
+		int ans = 0;
+
+		if (ch1 == ch2) {
+			ans = EditDistance(ros1, ros2);
+		} else {
+
+			int i = EditDistance(ros1, s2);
+			int d = EditDistance(s1, ros2);
+			int r = EditDistance(ros1, ros2);
+
+			ans = Math.min(i, Math.min(d, r)) + 1;
+
+		}
+
+		return ans;
+
+	}
+
+	public static int EditDistanceTD(String s1, String s2, int[][] strg) {
+
+		if (s1.length() == 0 || s2.length() == 0) {
+			return Math.max(s1.length(), s2.length());
+		}
+
+		if (strg[s1.length()][s2.length()] != -1) {
+			return strg[s1.length()][s2.length()];
+		}
+
+		char ch1 = s1.charAt(0);
+		char ch2 = s2.charAt(0);
+
+		String ros1 = s1.substring(1);
+		String ros2 = s2.substring(1);
+
+		int ans = 0;
+
+		if (ch1 == ch2) {
+			ans = EditDistanceTD(ros1, ros2, strg);
+		} else {
+
+			int i = EditDistanceTD(ros1, s2, strg);
+			int d = EditDistanceTD(s1, ros2, strg);
+			int r = EditDistanceTD(ros1, ros2, strg);
+
+			ans = Math.min(i, Math.min(d, r)) + 1;
+
+		}
+
+		strg[s1.length()][s2.length()] = ans;
+
+		return ans;
+
+	}
+
+	public static int EditDistanceBU(String s1, String s2) {
+
+		int[][] strg = new int[s1.length() + 1][s2.length() + 1];
+
+		for (int row = s1.length(); row >= 0; row--) {
+
+			for (int col = s2.length(); col >= 0; col--) {
+
+				if (row == s1.length()) {
+					strg[row][col] = s2.length() - col;
+					continue;
+				}
+
+				if (col == s2.length()) {
+					strg[row][col] = s1.length() - row;
+					continue;
+				}
+
+				if (s1.charAt(row) == s2.charAt(col)) {
+					strg[row][col] = strg[row + 1][col + 1];
+				} else {
+
+					int i = strg[row + 1][col];
+					int d = strg[row][col + 1];
+					int r = strg[row + 1][col + 1];
+
+					strg[row][col] = Math.min(i, Math.min(d, r)) + 1;
+
+				}
+
+			}
+		}
+
+		return strg[0][0];
+
+	}
+
+	public static int MCMTD(int[] arr, int si, int ei, int[][] strg) {
+
+		if (ei - si == 1) {
+			return 0;
+		}
+
+		if (strg[si][ei] != 0) {
+			return strg[si][ei];
+		}
+
+		int min = Integer.MAX_VALUE;
+
+		for (int k = si + 1; k <= ei - 1; k++) {
+
+			int fp = MCMTD(arr, si, k, strg);
+			int sp = MCMTD(arr, k, ei, strg);
+
+			int sw = arr[si] * arr[k] * arr[ei];
+
+			int total = fp + sp + sw;
+
+			if (total < min) {
+				min = total;
+			}
+		}
+
+		strg[si][ei] = min;
+
+		return min;
+
+	}
+
+	public static int MCMBU(int[] arr) {
+
+		int n = arr.length;
+		int[][] strg = new int[n][n];
+
+		for (int slide = 1; slide <= n - 2; slide++) {
+
+			for (int si = 0; si <= n - slide - 2; si++) {
+
+				int ei = si + slide + 1;
+
+				// copy
+				int min = Integer.MAX_VALUE;
+
+				for (int k = si + 1; k <= ei - 1; k++) {
+
+					int fp = strg[si][k];
+					int sp = strg[k][ei];
+
+					int sw = arr[si] * arr[k] * arr[ei];
+
+					int total = fp + sp + sw;
+
+					if (total < min) {
+						min = total;
+					}
+				}
+
+				strg[si][ei] = min;
+				//
+
+			}
+
+		}
+
+		return strg[0][n - 1];
+
+	}
+
 }
+
+
+

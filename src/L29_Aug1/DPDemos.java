@@ -2,6 +2,8 @@ package L29_Aug1;
 
 import java.util.Arrays;
 
+import javax.swing.plaf.synth.SynthSpinnerUI;
+
 /**
  * @author Garima Chhikara
  * @email garima.chhikara@codingblocks.com
@@ -50,8 +52,28 @@ public class DPDemos {
 			arr[i] = i + 1;
 		}
 
-		System.out.println(MCMTD(arr, 0, arr.length - 1, new int[arr.length][arr.length]));
-		System.out.println(MCMBU(arr));
+		// System.out.println(MCMTD(arr, 0, arr.length - 1, new
+		// int[arr.length][arr.length]));
+		// System.out.println(MCMBU(arr));
+
+		// int[] wine = new int[100];
+
+		// for (int i = 0; i < wine.length; i++) {
+		// wine[i] = i + 1;
+		// }
+
+		int[] wine = { 2, 3, 5, 1, 4 };
+
+		// System.out.println(WineProblemTD(wine, 0, wine.length - 1, new
+		// int[wine.length][wine.length]));
+		// System.out.println(WineProblemBU(wine));
+
+		String src = "baaabab";
+		String pat = "*********************************************************b******";
+
+		// System.out.println(WildCardMatching(src, pat));
+		System.out.println(WildCardMatchingTD(src, pat, new int[src.length() + 1][pat.length() + 1]));
+		System.out.println(WildCardMatchingBU(src, pat));
 
 		long end = System.currentTimeMillis();
 		System.out.println(end - start);
@@ -514,7 +536,230 @@ public class DPDemos {
 
 	}
 
+	public static int WineProblem(int[] arr, int si, int ei, int yr) {
+
+		if (si == ei) {
+			return arr[si] * yr;
+		}
+
+		int start = WineProblem(arr, si + 1, ei, yr + 1) + arr[si] * yr;
+		int end = WineProblem(arr, si, ei - 1, yr + 1) + arr[ei] * yr;
+
+		int ans = Math.max(start, end);
+
+		return ans;
+
+	}
+
+	public static int WineProblemTD(int[] arr, int si, int ei, int[][] strg) {
+
+		int yr = arr.length - ei + si;
+
+		if (si == ei) {
+			return arr[si] * yr;
+		}
+
+		if (strg[si][ei] != 0) {
+			return strg[si][ei];
+		}
+
+		int start = WineProblemTD(arr, si + 1, ei, strg) + arr[si] * yr;
+		int end = WineProblemTD(arr, si, ei - 1, strg) + arr[ei] * yr;
+
+		int ans = Math.max(start, end);
+
+		strg[si][ei] = ans;
+
+		return ans;
+
+	}
+
+	public static int WineProblemBU(int[] arr) {
+
+		int n = arr.length;
+		int[][] strg = new int[n][n];
+
+		for (int slide = 0; slide <= n - 1; slide++) {
+
+			for (int si = 0; si <= n - slide - 1; si++) {
+
+				int ei = si + slide;
+
+				int yr = arr.length - ei + si;
+
+				if (si == ei) {
+					strg[si][ei] = arr[si] * yr;
+					continue;
+				}
+
+				// copy
+				int start = strg[si + 1][ei] + arr[si] * yr;
+				int end = strg[si][ei - 1] + arr[ei] * yr;
+
+				int ans = Math.max(start, end);
+
+				strg[si][ei] = ans;
+				//
+
+			}
+
+		}
+
+		for (int i = 0; i < strg.length; i++) {
+			for (int j = 0; j < strg[i].length; j++) {
+				System.out.print(strg[i][j] + "\t");
+			}
+			System.out.println();
+		}
+
+		return strg[0][n - 1];
+	}
+
+	public static boolean WildCardMatching(String src, String pat) {
+
+		if (src.length() == 0 && pat.length() == 0) {
+			return true;
+		}
+
+		if (src.length() != 0 && pat.length() == 0) {
+			return false;
+		}
+
+		if (src.length() == 0 && pat.length() != 0) {
+
+			for (int i = 0; i < pat.length(); i++) {
+				if (pat.charAt(i) != '*') {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		char chs = src.charAt(0);
+		char chp = pat.charAt(0);
+
+		String ros = src.substring(1);
+		String rop = pat.substring(1);
+
+		boolean res;
+
+		if (chs == chp || chp == '?') {
+			res = WildCardMatching(ros, rop);
+		} else if (chp == '*') {
+
+			boolean blank = WildCardMatching(src, rop);
+			boolean multiple = WildCardMatching(ros, pat);
+
+			res = blank || multiple;
+		} else {
+			res = false;
+		}
+
+		return res;
+
+	}
+
+	public static boolean WildCardMatchingTD(String src, String pat, int[][] strg) {
+
+		if (src.length() == 0 && pat.length() == 0) {
+			return true;
+		}
+
+		if (src.length() != 0 && pat.length() == 0) {
+			return false;
+		}
+
+		if (src.length() == 0 && pat.length() != 0) {
+
+			for (int i = 0; i < pat.length(); i++) {
+				if (pat.charAt(i) != '*') {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		if (strg[src.length()][pat.length()] != 0) {
+			return strg[src.length()][pat.length()] == 2 ? true : false;
+		}
+
+		char chs = src.charAt(0);
+		char chp = pat.charAt(0);
+
+		String ros = src.substring(1);
+		String rop = pat.substring(1);
+
+		boolean res;
+
+		if (chs == chp || chp == '?') {
+			res = WildCardMatchingTD(ros, rop, strg);
+		} else if (chp == '*') {
+
+			boolean blank = WildCardMatchingTD(src, rop, strg);
+			boolean multiple = WildCardMatchingTD(ros, pat, strg);
+
+			res = blank || multiple;
+		} else {
+			res = false;
+		}
+
+		strg[src.length()][pat.length()] = (res ? 2 : 1);
+
+		return res;
+
+	}
+
+	public static boolean WildCardMatchingBU(String src, String pat) {
+
+		boolean[][] strg = new boolean[src.length() + 1][pat.length() + 1];
+
+		strg[src.length()][pat.length()] = true;
+
+		for (int row = src.length(); row >= 0; row--) {
+
+			for (int col = pat.length() - 1; col >= 0; col--) {
+
+				// last row
+				if (row == src.length()) {
+
+					if (pat.charAt(col) == '*') {
+						strg[row][col] = strg[row][col + 1];
+					} else {
+						strg[row][col] = false;
+					}
+
+					continue;
+				}
+
+				// copy
+				char chs = src.charAt(row);
+				char chp = pat.charAt(col);
+
+				boolean res;
+
+				if (chs == chp || chp == '?') {
+					res = strg[row + 1][col + 1];
+				} else if (chp == '*') {
+
+					boolean blank = strg[row][col + 1];
+					boolean multiple = strg[row + 1][col];
+
+					res = blank || multiple;
+				} else {
+					res = false;
+				}
+
+				strg[row][col] = res;
+				//
+
+			}
+
+		}
+
+		return strg[0][0];
+
+	}
+
 }
-
-
-

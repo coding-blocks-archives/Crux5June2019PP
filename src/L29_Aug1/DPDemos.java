@@ -46,11 +46,11 @@ public class DPDemos {
 		// System.out.println(EditDistanceTD(s1, s2, strg));
 		// System.out.println(EditDistanceBU(s1, s2));
 
-		int[] arr = new int[500];
+		int[] arr = { 30, 9, 60, 1, 50, 10 };
 
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = i + 1;
-		}
+		// for (int i = 0; i < arr.length; i++) {
+		// arr[i] = i + 1;
+		// }
 
 		// System.out.println(MCMTD(arr, 0, arr.length - 1, new
 		// int[arr.length][arr.length]));
@@ -72,8 +72,38 @@ public class DPDemos {
 		String pat = "*********************************************************b******";
 
 		// System.out.println(WildCardMatching(src, pat));
-		System.out.println(WildCardMatchingTD(src, pat, new int[src.length() + 1][pat.length() + 1]));
-		System.out.println(WildCardMatchingBU(src, pat));
+		// System.out.println(WildCardMatchingTD(src, pat, new int[src.length() +
+		// 1][pat.length() + 1]));
+		// System.out.println(WildCardMatchingBU(src, pat));
+
+		int[] p = { 1, 4, 5, 7 };
+		int[] w = { 5, 4, 4, 1 };
+		// System.out.println(Knapsack(p, w, 0, 7));
+		// System.out.println(KnapsackTD(p, w, 0, 7, new int[p.length][7 + 1]));
+		// System.out.println(KnapsackBU(p, w, 7));
+
+		int[] mixtures = { 10, 20, 30, 40 };
+
+		// for (int i = 0; i < mixtures.length; i++) {
+		// mixtures[i] = i + 1;
+		// }
+
+		int[][] storage = new int[mixtures.length][mixtures.length];
+
+		for (int i = 0; i < storage.length; i++) {
+			Arrays.fill(storage[i], -1);
+		}
+
+		// System.out.println(MixturesTD(mixtures, 0, mixtures.length - 1, storage));
+		// System.out.println(MixturesBU(mixtures));
+
+		int[] rod = new int[100];
+
+		for (int i = 0; i < rod.length; i++) {
+			rod[i] = i * 2;
+		}
+		System.out.println(rodCutTD(rod, rod.length - 1, new int[rod.length]));
+		System.out.println(rodCutBU(rod));
 
 		long end = System.currentTimeMillis();
 		System.out.println(end - start);
@@ -762,4 +792,222 @@ public class DPDemos {
 
 	}
 
+	public static int Knapsack(int[] p, int[] w, int vidx, int cap) {
+
+		if (vidx == p.length) {
+			return 0;
+		}
+		int inc = 0;
+		if (w[vidx] <= cap)
+			inc = Knapsack(p, w, vidx + 1, cap - w[vidx]) + p[vidx];
+		int exc = Knapsack(p, w, vidx + 1, cap);
+		return Math.max(inc, exc);
+
+	}
+
+	public static int KnapsackTD(int[] p, int[] w, int vidx, int cap, int[][] strg) {
+
+		if (vidx == p.length) {
+			return 0;
+		}
+
+		if (strg[vidx][cap] != 0) {
+			return strg[vidx][cap];
+		}
+		int inc = 0;
+		if (w[vidx] <= cap)
+			inc = KnapsackTD(p, w, vidx + 1, cap - w[vidx], strg) + p[vidx];
+		int exc = KnapsackTD(p, w, vidx + 1, cap, strg);
+		return strg[vidx][cap] = Math.max(inc, exc);
+
+	}
+
+	public static int KnapsackBU(int[] p, int[] w, int cap) {
+
+		int[][] strg = new int[p.length + 1][cap + 1];
+
+		for (int row = strg.length - 1; row >= 0; row--) {
+
+			for (int col = 0; col <= cap; col++) {
+
+				if (row == strg.length - 1) {
+					strg[row][col] = 0;
+					continue;
+				}
+
+				int inc = 0;
+				if (w[row] <= col)
+					inc = strg[row + 1][col - w[row]] + p[row];
+
+				int exc = strg[row + 1][col];
+
+				strg[row][col] = Math.max(inc, exc);
+
+			}
+		}
+
+		return strg[0][cap];
+
+	}
+
+	public static int MixturesTD(int[] arr, int si, int ei, int[][] strg) {
+
+		if (si == ei) {
+			return 0;
+		}
+
+		if (strg[si][ei] != -1) {
+			return strg[si][ei];
+		}
+
+		int min = Integer.MAX_VALUE;
+
+		for (int k = si; k <= ei - 1; k++) {
+
+			int fp = MixturesTD(arr, si, k, strg);
+			int sp = MixturesTD(arr, k + 1, ei, strg);
+
+			int sw = color(arr, si, k) * color(arr, k + 1, ei);
+
+			int total = fp + sp + sw;
+
+			if (total < min) {
+				min = total;
+			}
+		}
+
+		strg[si][ei] = min;
+
+		return min;
+
+	}
+
+	public static int color(int[] arr, int si, int ei) {
+
+		int sum = 0;
+
+		for (int i = si; i <= ei; i++) {
+			sum += arr[i];
+		}
+
+		return sum % 100;
+	}
+
+	public static int MixturesBU(int[] arr) {
+
+		int n = arr.length;
+
+		int[][] strg = new int[arr.length][arr.length];
+
+		for (int slide = 1; slide <= n - 1; slide++) {
+
+			for (int si = 0; si <= n - slide - 1; si++) {
+
+				int ei = si + slide;
+
+				// copy
+				int min = Integer.MAX_VALUE;
+
+				for (int k = si; k <= ei - 1; k++) {
+
+					int fp = strg[si][k];
+					int sp = strg[k + 1][ei];
+
+					int sw = color(arr, si, k) * color(arr, k + 1, ei);
+
+					int total = fp + sp + sw;
+
+					if (total < min) {
+						min = total;
+					}
+				}
+
+				strg[si][ei] = min;
+				//
+			}
+		}
+
+		for (int i = 0; i < strg.length; i++) {
+			for (int j = 0; j < strg[i].length; j++) {
+				System.out.print(strg[i][j] + "\t");
+			}
+			System.out.println();
+		}
+
+		return strg[0][n - 1];
+
+	}
+
+	public static int rodCutTD(int[] arr, int len, int[] strg) {
+
+		if (strg[len] != 0) {
+			return strg[len];
+		}
+
+		int max = arr[len];
+
+		int left = 1;
+		int right = len - 1;
+
+		while (left <= right) {
+
+			int fp = rodCutTD(arr, left, strg);
+			int sp = rodCutTD(arr, right, strg);
+
+			int total = fp + sp;
+
+			if (total > max) {
+				max = total;
+			}
+
+			left++;
+			right--;
+
+		}
+
+		strg[len] = max;
+
+		return max;
+	}
+
+	public static int rodCutBU(int[] arr) {
+
+		int[] strg = new int[arr.length];
+
+		for (int len = 0; len < strg.length; len++) {
+
+			int max = arr[len];
+
+			int left = 1;
+			int right = len - 1;
+
+			while (left <= right) {
+
+				int fp = strg[left];
+				int sp = strg[right];
+
+				int total = fp + sp;
+
+				if (total > max) {
+					max = total;
+				}
+
+				left++;
+				right--;
+
+			}
+
+			strg[len] = max;
+
+		}
+
+		return strg[strg.length - 1];
+
+	}
+
+	
+	
 }
+
+
+

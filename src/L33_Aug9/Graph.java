@@ -1,7 +1,11 @@
 package L33_Aug9;
 
+import java.security.IdentityScope;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+
+import L28_July31.HeapGeneric;
 
 /**
  * @author Garima Chhikara
@@ -133,9 +137,17 @@ public class Graph {
 		int vname;
 		String psf;
 
+		String color;
+
 		public Pair(int vname, String psf) {
 			this.vname = vname;
 			this.psf = psf;
+		}
+
+		public Pair(int vname, String psf, String color) {
+			this.vname = vname;
+			this.psf = psf;
+			this.color = color;
 		}
 	}
 
@@ -241,10 +253,10 @@ public class Graph {
 
 		for (int src = 1; src < matrix[0].length; src++) {
 
-			if(visited.containsKey(src)) {
-				continue ;
+			if (visited.containsKey(src)) {
+				continue;
 			}
-			
+
 			// put the src pair in queue
 			Pair sp = new Pair(src, src + "");
 			queue.addLast(sp);
@@ -269,6 +281,7 @@ public class Graph {
 				// nbrs
 				for (int nbr = 1; nbr < matrix[0].length; nbr++) {
 
+					// make the pair only for unvisited nbrs
 					if (matrix[rp.vname][nbr] != 0 && !visited.containsKey(nbr)) {
 
 						// create a new pair for nbr
@@ -282,7 +295,7 @@ public class Graph {
 		}
 
 	}
-	
+
 	public void DFT() {
 
 		HashMap<Integer, Boolean> visited = new HashMap<>();
@@ -291,10 +304,10 @@ public class Graph {
 
 		for (int src = 1; src < matrix[0].length; src++) {
 
-			if(visited.containsKey(src)) {
-				continue ;
+			if (visited.containsKey(src)) {
+				continue;
 			}
-			
+
 			// put the src pair in queue
 			Pair sp = new Pair(src, src + "");
 			stack.addFirst(sp);
@@ -333,4 +346,376 @@ public class Graph {
 
 	}
 
+	public boolean isCyclic() {
+
+		HashMap<Integer, Boolean> visited = new HashMap<>();
+
+		LinkedList<Pair> queue = new LinkedList<>();
+
+		for (int src = 1; src < matrix[0].length; src++) {
+
+			if (visited.containsKey(src)) {
+				continue;
+			}
+
+			// put the src pair in queue
+			Pair sp = new Pair(src, src + "");
+			queue.addLast(sp);
+
+			// work till queue is not empty
+			while (!queue.isEmpty()) {
+
+				// remove the pair
+				Pair rp = queue.removeFirst();
+
+				// ignore the second C
+				if (visited.containsKey(rp.vname)) {
+					return true;
+				}
+
+				// put in visited
+				visited.put(rp.vname, true);
+
+				// nbrs
+				for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+
+					// make the pair only for unvisited nbrs
+					if (matrix[rp.vname][nbr] != 0 && !visited.containsKey(nbr)) {
+
+						// create a new pair for nbr
+						Pair np = new Pair(nbr, rp.psf + nbr);
+						queue.addLast(np);
+					}
+				}
+
+			}
+
+		}
+
+		return false;
+	}
+
+	public boolean isConnected() {
+
+		int count = 0;
+
+		HashMap<Integer, Boolean> visited = new HashMap<>();
+
+		LinkedList<Pair> queue = new LinkedList<>();
+
+		for (int src = 1; src < matrix[0].length; src++) {
+
+			if (visited.containsKey(src)) {
+				continue;
+			}
+
+			count++;
+
+			// put the src pair in queue
+			Pair sp = new Pair(src, src + "");
+			queue.addLast(sp);
+
+			// work till queue is not empty
+			while (!queue.isEmpty()) {
+
+				// remove the pair
+				Pair rp = queue.removeFirst();
+
+				// ignore the second C
+				if (visited.containsKey(rp.vname)) {
+					continue;
+				}
+
+				// put in visited
+				visited.put(rp.vname, true);
+
+				// nbrs
+				for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+
+					// make the pair only for unvisited nbrs
+					if (matrix[rp.vname][nbr] != 0 && !visited.containsKey(nbr)) {
+
+						// create a new pair for nbr
+						Pair np = new Pair(nbr, rp.psf + nbr);
+						queue.addLast(np);
+					}
+				}
+
+			}
+
+		}
+
+		return count == 1;
+	}
+
+	public boolean isTree() {
+		return !isCyclic() && isConnected();
+	}
+
+	public ArrayList<ArrayList<Integer>> getCC() {
+
+		ArrayList<ArrayList<Integer>> tres = new ArrayList<>();
+
+		HashMap<Integer, Boolean> visited = new HashMap<>();
+
+		LinkedList<Pair> queue = new LinkedList<>();
+
+		for (int src = 1; src < matrix[0].length; src++) {
+
+			if (visited.containsKey(src)) {
+				continue;
+			}
+
+			ArrayList<Integer> comp = new ArrayList<>();
+
+			// put the src pair in queue
+			Pair sp = new Pair(src, src + "");
+			queue.addLast(sp);
+
+			// work till queue is not empty
+			while (!queue.isEmpty()) {
+
+				// remove the pair
+				Pair rp = queue.removeFirst();
+
+				// ignore the second C
+				if (visited.containsKey(rp.vname)) {
+					continue;
+				}
+
+				// put in visited
+				visited.put(rp.vname, true);
+
+				// add in component array list
+				comp.add(rp.vname);
+
+				// nbrs
+				for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+
+					// make the pair only for unvisited nbrs
+					if (matrix[rp.vname][nbr] != 0 && !visited.containsKey(nbr)) {
+
+						// create a new pair for nbr
+						Pair np = new Pair(nbr, rp.psf + nbr);
+						queue.addLast(np);
+					}
+				}
+
+			}
+
+			tres.add(comp);
+
+		} // for src
+
+		return tres;
+	}
+
+	public boolean isBipartite() {
+
+		HashMap<Integer, String> visited = new HashMap<>();
+
+		LinkedList<Pair> queue = new LinkedList<>();
+
+		for (int src = 1; src < matrix[0].length; src++) {
+
+			if (visited.containsKey(src)) {
+				continue;
+			}
+
+			// put the src pair in queue
+			Pair sp = new Pair(src, src + "", "R");
+			queue.addLast(sp);
+
+			// work till queue is not empty
+			while (!queue.isEmpty()) {
+
+				// remove the pair
+				Pair rp = queue.removeFirst();
+
+				// ignore the second C
+				if (visited.containsKey(rp.vname)) {
+
+					String oc = visited.get(rp.vname);
+					String nc = rp.color;
+
+					if (!oc.equals(nc)) {
+						return false;
+					}
+
+					continue;
+				}
+
+				// put in visited
+				visited.put(rp.vname, rp.color);
+
+				// nbrs
+				for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+
+					// make the pair only for unvisited nbrs
+					if (matrix[rp.vname][nbr] != 0 && !visited.containsKey(nbr)) {
+
+						// create a new pair for nbr
+						String nc = rp.color.equals("R") ? "G" : "R";
+
+						Pair np = new Pair(nbr, rp.psf + nbr, nc);
+						queue.addLast(np);
+					}
+				}
+
+			}
+
+		}
+
+		return true;
+
+	}
+
+	private class PrimsPair implements Comparable<PrimsPair> {
+		int vname;
+		int acqvname;
+		int cost;
+
+		@Override
+		public int compareTo(PrimsPair o) {
+			return o.cost - this.cost;
+		}
+	}
+
+	public Graph Prims() {
+
+		Graph mst = new Graph(matrix.length - 1);
+
+		HashMap<Integer, PrimsPair> map = new HashMap<>();
+
+		HeapGeneric<PrimsPair> heap = new HeapGeneric<>();
+
+		// make a pair and put in heap and hash map
+		for (int i = 1; i < matrix.length; i++) {
+			PrimsPair np = new PrimsPair();
+			np.vname = i;
+			np.acqvname = 0;
+			np.cost = Integer.MAX_VALUE;
+
+			heap.add(np);
+			map.put(i, np);
+		}
+
+		// work till heap is not empty
+		while (!heap.isEmpty()) {
+
+			// remove the pair from heap
+			PrimsPair rp = heap.remove();
+			map.remove(rp.vname);
+
+			// mst add
+			if (rp.acqvname != 0) {
+				mst.addEdge(rp.vname, rp.acqvname, rp.cost);
+			}
+
+			// nbrs
+			for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+				if (matrix[rp.vname][nbr] != 0) {
+
+					// update the pairs which are present in heap
+					if (map.containsKey(nbr)) {
+
+						PrimsPair nbrpair = map.get(nbr);
+
+						int oc = nbrpair.cost;
+						int nc = matrix[rp.vname][nbr];
+
+						// if new cost < old cost then update the pair
+						if (nc < oc) {
+							nbrpair.cost = nc;
+							nbrpair.acqvname = rp.vname;
+
+							heap.updatePriority(nbrpair);
+						}
+
+					}
+				}
+			}
+
+		}
+
+		return mst;
+
+	}
+
+	private class DijkstraPair implements Comparable<DijkstraPair> {
+		int vname;
+		String psf;
+		int cost;
+
+		@Override
+		public int compareTo(DijkstraPair o) {
+			return o.cost - this.cost;
+		}
+	}
+
+	public void Dijkstra(int src) {
+
+		HashMap<Integer, DijkstraPair> map = new HashMap<>();
+
+		HeapGeneric<DijkstraPair> heap = new HeapGeneric<>();
+
+		// make a pair and put in heap and hash map
+		for (int i = 1; i < matrix.length; i++) {
+			DijkstraPair np = new DijkstraPair();
+			np.vname = i;
+			np.psf = "";
+			np.cost = Integer.MAX_VALUE;
+
+			if (i == src) {
+				np.psf = i + "";
+				np.cost = 0;
+			}
+
+			heap.add(np);
+			map.put(i, np);
+		}
+
+		// work till heap is not empty
+		while (!heap.isEmpty()) {
+
+			// remove the pair from heap
+			DijkstraPair rp = heap.remove();
+			map.remove(rp.vname);
+
+			// syso
+			System.out.println(rp.vname + " via " + rp.psf + " @cost: " + rp.cost);
+
+			// nbrs
+			for (int nbr = 1; nbr < matrix[0].length; nbr++) {
+				if (matrix[rp.vname][nbr] != 0) {
+
+					// update the pairs which are present in heap
+					if (map.containsKey(nbr)) {
+
+						DijkstraPair nbrpair = map.get(nbr);
+
+						int oc = nbrpair.cost;
+						int nc = rp.cost + matrix[rp.vname][nbr];
+
+						// if new cost < old cost then update the pair
+						if (nc < oc) {
+							nbrpair.cost = nc;
+							nbrpair.psf = rp.psf + nbr;
+
+							heap.updatePriority(nbrpair);
+						}
+
+					}
+				}
+			}
+
+		}
+
+	}
+
 }
+
+
+
+
+

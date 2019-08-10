@@ -25,6 +25,7 @@ public class Array2DOps {
 
 		int[][] one = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 } };
 		int[][] two = { { 1, 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 }, { 11, 12, 13, 14, 15 }, { 16, 17, 18, 19, 20 } };
+
 		int[][] res = matrixMultiplication(one, two);
 
 		display(res);
